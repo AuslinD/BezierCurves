@@ -19,16 +19,22 @@ def main():
             if event.type == QUIT:
                 run = False
 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                print("down")
+                
+                
+
         if point_count != len(points):
             update_points()
 
         
-        p0 = 30,30
+        #p0 = 30,30
     
         points[1] = pygame.mouse.get_pos()
-        p2 = 30,190
+        #p2 = 30,190
     
         screen.fill((255, 255, 255))
+        #pygame.draw.circle(screen, (0), )
         for p in points:
             pygame.draw.circle(screen, (0), p, 5)
         for t in np.arange(0, 1, 0.01):
