@@ -11,13 +11,18 @@ global point_count, points
 point_count = 0
 points = []
 
+button = pygame.Surface((20, 20))
+button.fill((0, 255, 0))
+
+
+
 def main():
     point_count = 3
     points = [(30, 30), (100, 100), (30, 200)]
     point_selected = -1
     run = True
     while run:
-        
+        mouse_pos = pygame.mouse.get_pos()
             
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -27,14 +32,21 @@ def main():
                 for i in range(len(points)):
                     if within(pygame.mouse.get_pos(), points[i]) and point_selected == -1:
                         point_selected = i
-                        print("selecting " + str(point_selected))
+                        #print("selecting " + str(point_selected))
                     if point_selected >= 0:
-                        points[point_selected] = pygame.mouse.get_pos()
+                        points[point_selected] = mouse_pos
             elif event.type == pygame.MOUSEBUTTONUP:
                 point_selected = -1;
+                if button.get_rect().collidepoint((mouse_pos[0] - 20, mouse_pos[1] - 500)):
+                    point_count += 1
+                    
+                
             elif event.type == pygame.MOUSEMOTION:
                 if point_selected >= 0:
                     points[point_selected] = pygame.mouse.get_pos()
+
+                
+                
 
                 
                 
@@ -61,31 +73,35 @@ def main():
             py = 0
             
             for i in range(point_count):
-               t_coeff = i
-               binomial_coeff = math.comb(point_count - 1, i)
-               px += binomial_coeff * points[i][0]*((1-t)**(point_count - 1 - t_coeff))*(t**t_coeff)
-               py += binomial_coeff * points[i][1]*((1-t)**(point_count - 1 - t_coeff))*(t**t_coeff)
+                if point_count != len(points):
+                    break
+                t_coeff = i
+                binomial_coeff = math.comb(point_count - 1, i)
+                px += binomial_coeff * points[i][0]*((1-t)**(point_count - 1 - t_coeff))*(t**t_coeff)
+                py += binomial_coeff * points[i][1]*((1-t)**(point_count - 1 - t_coeff))*(t**t_coeff)
             #px = p0[0]*(1-t)**2 + 2*(1-t)*t*p1[0] + p2[0]*t**2
             
             #py = p0[1]*(1-t)**2 + 2*(1-t)*t*p1[1] + p2[1]*t**2       
             pygame.draw.circle(screen, (0, 0, 0), (px, py), 4)
-
+        screen.blit(button, (20, 500))
         pygame.display.update()
     print(run)
     
 
 def update_points():
+    pass
+"""
     if point_count > len(points):
-        points.append((50, 50))
+        points.append((250, 250))
     elif point_count < len(points):
         points.remove(len(points) - 1)
-    
+   """ 
 
 def within(mousePos, circlePos):
     radius = 5
     distance = (int(mousePos[0]) - int(circlePos[0])) ** 2 + (int(mousePos[1]) - int(circlePos[1])) ** 2
     distance = math.sqrt(distance)
-    print(distance < radius)
+    #print(distance < radius)
     return distance < radius
 
         
