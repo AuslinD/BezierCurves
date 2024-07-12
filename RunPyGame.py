@@ -3,6 +3,7 @@ from pygame.locals import *
 from sys import exit
 import numpy as np
 import math
+import random
 
 pygame.init()
 screen = pygame.display.set_mode((1200, 600))
@@ -17,6 +18,7 @@ button.fill((0, 255, 0))
 
 
 def main():
+    global point_count, points
     point_count = 3
     points = [(30, 30), (100, 100), (30, 200)]
     point_selected = -1
@@ -38,7 +40,9 @@ def main():
             elif event.type == pygame.MOUSEBUTTONUP:
                 point_selected = -1;
                 if button.get_rect().collidepoint((mouse_pos[0] - 20, mouse_pos[1] - 500)):
+                    print(point_count)
                     point_count += 1
+                    update_points()
                     
                 
             elif event.type == pygame.MOUSEMOTION:
@@ -65,31 +69,36 @@ def main():
         if point_count != len(points):
             update_points()
 
+        screen.blit(button, (20, 500))
         
         for p in points:
-            pygame.draw.circle(screen, (0), p, 5)
+            pygame.draw.circle(screen, (0), p, 6)
         for t in np.arange(0, 1, 0.01):
             px = 0
             py = 0
             
-            for i in range(point_count):
-                if point_count != len(points):
-                    break
+            for i in range(len(points)):
                 t_coeff = i
-                binomial_coeff = math.comb(point_count - 1, i)
-                px += binomial_coeff * points[i][0]*((1-t)**(point_count - 1 - t_coeff))*(t**t_coeff)
-                py += binomial_coeff * points[i][1]*((1-t)**(point_count - 1 - t_coeff))*(t**t_coeff)
+                binomial_coeff = math.comb(len(points) - 1, i)
+                px += binomial_coeff * points[i][0]*((1-t)**(len(points) - 1 - t_coeff))*(t**t_coeff)
+                py += binomial_coeff * points[i][1]*((1-t)**(len(points) - 1 - t_coeff))*(t**t_coeff)
             #px = p0[0]*(1-t)**2 + 2*(1-t)*t*p1[0] + p2[0]*t**2
             
             #py = p0[1]*(1-t)**2 + 2*(1-t)*t*p1[1] + p2[1]*t**2       
-            pygame.draw.circle(screen, (0, 0, 0), (px, py), 4)
-        screen.blit(button, (20, 500))
+            pygame.draw.circle(screen, (250, 0, 0), (px, py), 4)
+        
         pygame.display.update()
     print(run)
     
 
 def update_points():
-    pass
+    global point_count, points
+    points = []
+    print(point_count)
+    for i in range(point_count):
+        newPoint = (random.randint(0, screen.get_width()), random.randint(0, screen.get_height()))
+        points.append(newPoint)
+        print(points)
 """
     if point_count > len(points):
         points.append((250, 250))
@@ -98,7 +107,7 @@ def update_points():
    """ 
 
 def within(mousePos, circlePos):
-    radius = 5
+    radius = 6
     distance = (int(mousePos[0]) - int(circlePos[0])) ** 2 + (int(mousePos[1]) - int(circlePos[1])) ** 2
     distance = math.sqrt(distance)
     #print(distance < radius)
