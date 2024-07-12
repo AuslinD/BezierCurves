@@ -93,12 +93,11 @@ def main():
 
 def update_points():
     global point_count, points
-    points = []
     print(point_count)
-    for i in range(point_count):
+    while point_count > len(points):
         newPoint = (random.randint(0, screen.get_width()), random.randint(0, screen.get_height()))
         points.append(newPoint)
-        print(points)
+        #print(points)
 """
     if point_count > len(points):
         points.append((250, 250))
