@@ -12,8 +12,11 @@ global point_count, points
 point_count = 0
 points = []
 
-button = pygame.Surface((20, 20))
-button.fill((0, 255, 0))
+add_button = pygame.Surface((20, 20))
+add_button.fill((0, 255, 0))
+
+sub_button = pygame.Surface((20, 20))
+sub_button.fill((255, 0, 0))
 
 
 
@@ -39,9 +42,12 @@ def main():
                         points[point_selected] = mouse_pos
             elif event.type == pygame.MOUSEBUTTONUP:
                 point_selected = -1;
-                if button.get_rect().collidepoint((mouse_pos[0] - 20, mouse_pos[1] - 500)):
-                    print(point_count)
+                if add_button.get_rect().collidepoint((mouse_pos[0] - 20, mouse_pos[1] - 500)):
+                    #print(point_count)
                     point_count += 1
+                    update_points()
+                if sub_button.get_rect().collidepoint((mouse_pos[0] - 20, mouse_pos[1] - 535)):
+                    point_count -= 1
                     update_points()
                     
                 
@@ -69,7 +75,8 @@ def main():
         if point_count != len(points):
             update_points()
 
-        screen.blit(button, (20, 500))
+        screen.blit(add_button, (20, 500))
+        screen.blit(sub_button, (20, 535))
         
         for p in points:
             pygame.draw.circle(screen, (0), p, 6)
@@ -98,6 +105,9 @@ def update_points():
         newPoint = (random.randint(0, screen.get_width()), random.randint(0, screen.get_height()))
         points.append(newPoint)
         #print(points)
+    while point_count < len(points):
+        points.pop(-1)
+    
 """
     if point_count > len(points):
         points.append((250, 250))
